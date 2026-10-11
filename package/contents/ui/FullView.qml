@@ -90,7 +90,7 @@ Item {
     component Card: Rectangle {
         default property alias content: inner.data
         Layout.fillWidth: true
-        radius: Kirigami.Units.cornerRadius
+        radius: root.cardRadius
         color: full.cardColor
         implicitHeight: inner.implicitHeight + Kirigami.Units.mediumSpacing * 2
 

@@ -12,6 +12,9 @@ import org.kde.kirigami as Kirigami
 PlasmoidItem {
     id: root
 
+    // Half the theme's card rounding
+    readonly property real cardRadius: Math.max(2, Math.round(Kirigami.Units.cornerRadius / 2))
+
     // Settings, empty formats fall back to the locale's
     readonly property string timeFormat: Plasmoid.configuration.timeFormat || Qt.locale().timeFormat(Locale.ShortFormat)
     readonly property string dateFormat: Plasmoid.configuration.dateFormat || Qt.locale().dateFormat(Locale.ShortFormat)
