@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+    <kcfgfile name=""/>
+
+    <group name="General">
+        <entry name="showTime" type="Bool">
+            <label>Show the time in the panel</label>
+            <default>true</default>
+        </entry>
+        <entry name="timeFormat" type="String">
+            <label>Qt time format for the panel (empty = locale's short format)</label>
+            <default></default>
+        </entry>
+        <entry name="showDate" type="Bool">
+            <label>Show the date in the panel</label>
+            <default>true</default>
+        </entry>
+        <entry name="dateFormat" type="String">
+            <label>Qt date format for the panel (empty = locale's short format)</label>
+            <default>ddd d MMM</default>
+        </entry>
+        <entry name="datePosition" type="String">
+            <label>Where the date goes relative to the time (before, after or below)</label>
+            <default>before</default>
+        </entry>
+        <entry name="panelFontFamily" type="String">
+            <label>Font family for the panel text (empty = theme font)</label>
+            <default></default>
+        </entry>
+        <entry name="panelFontSize" type="Double">
+            <label>Font size in points for the panel time (0 = automatic)</label>
+            <default>0</default>
+        </entry>
+        <entry name="panelFontWeight" type="Int">
+            <label>Font weight for the panel time (100 = thin ... 900 = black)</label>
+            <default>700</default>
+        </entry>
+        <entry name="panelFontItalic" type="Bool">
+            <label>Italic panel text</label>
+            <default>false</default>
+        </entry>
+        <entry name="showWeekNumbers" type="Bool">
+            <label>Show ISO week numbers in the calendar</label>
+            <default>false</default>
+        </entry>
+    </group>
+</kcfg>
