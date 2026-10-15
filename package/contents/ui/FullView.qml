@@ -7,23 +7,23 @@ import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import org.kde.plasma.plasmoid
 import org.kde.plasma.components as PlasmaComponents
+import org.kde.plasma.extras as PlasmaExtras
 import org.kde.plasma.clock
 import org.kde.kirigami as Kirigami
+import org.kde.ksvg as KSvg
 
-Item {
+PlasmaExtras.Representation {
     id: full
-    clip: true
 
-    readonly property color cardColor: Qt.alpha(Kirigami.Theme.textColor, 0.07)
     readonly property bool showWeekNumbers: Plasmoid.configuration.showWeekNumbers === true
 
     Layout.minimumWidth: Kirigami.Units.gridUnit * 19
     Layout.preferredWidth: Kirigami.Units.gridUnit * 19
     // Fit the content exactly, or Plasma's saved popup size can leave a gap at the bottom
-    readonly property real contentHeight: mainColumn.implicitHeight + Kirigami.Units.smallSpacing * 2
-    Layout.minimumHeight: contentHeight
-    Layout.preferredHeight: contentHeight
-    Layout.maximumHeight: contentHeight
+    Layout.minimumHeight: implicitHeight
+    Layout.preferredHeight: implicitHeight
+    Layout.maximumHeight: implicitHeight
+    spacing: Kirigami.Units.smallSpacing
 
     // Seconds only tick while the popup is open
     Clock {
@@ -87,11 +87,11 @@ Item {
         opacity: 0.55
     }
 
-    component Card: Rectangle {
+    component Card: KSvg.FrameSvgItem {
         default property alias content: inner.data
         Layout.fillWidth: true
-        radius: root.cardRadius
-        color: full.cardColor
+        imagePath: "widgets/frame"
+        prefix: "plain"
         implicitHeight: inner.implicitHeight + Kirigami.Units.mediumSpacing * 2
 
         ColumnLayout {
@@ -117,18 +117,8 @@ Item {
 
     // Layout
 
-    ColumnLayout {
-        id: mainColumn
-        anchors.fill: parent
-        anchors.topMargin: Kirigami.Units.smallSpacing
-        anchors.bottomMargin: Kirigami.Units.smallSpacing
-        anchors.leftMargin: Kirigami.Units.mediumSpacing
-        anchors.rightMargin: Kirigami.Units.mediumSpacing
-        spacing: Kirigami.Units.smallSpacing
-
-        // Header
-        RowLayout {
-            Layout.fillWidth: true
+    header: PlasmaExtras.PlasmoidHeading {
+        contentItem: RowLayout {
             spacing: Kirigami.Units.smallSpacing
 
             Kirigami.Icon {
@@ -136,27 +126,26 @@ Item {
                 Layout.preferredWidth: Kirigami.Units.iconSizes.smallMedium
                 Layout.preferredHeight: Kirigami.Units.iconSizes.smallMedium
             }
-            PlasmaComponents.Label {
+            Kirigami.Heading {
+                level: 1
                 text: i18n("Clock")
-                font.bold: true
-                font.pixelSize: Kirigami.Theme.defaultFont.pixelSize * 1.25
             }
             Item { Layout.fillWidth: true }
 
             // Time zone chip
-            Rectangle {
+            KSvg.FrameSvgItem {
                 visible: popupClock.timeZoneCode !== ""
                 Layout.preferredWidth: zoneLabel.implicitWidth + Kirigami.Units.largeSpacing
                 Layout.preferredHeight: zoneLabel.implicitHeight + Kirigami.Units.smallSpacing
-                radius: height / 2
-                color: Qt.alpha(root.accent, 0.18)
+                imagePath: "widgets/viewitem"
+                prefix: "selected"
 
                 PlasmaComponents.Label {
                     id: zoneLabel
                     anchors.centerIn: parent
                     text: popupClock.timeZoneCode
                     font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-                    font.bold: true; color: root.accent
+                    font.bold: true
                 }
 
                 HoverHandler { id: zoneHover }
@@ -164,6 +153,10 @@ Item {
                 QQC2.ToolTip.visible: zoneHover.hovered
             }
         }
+    }
+
+    contentItem: ColumnLayout {
+        spacing: Kirigami.Units.smallSpacing
 
         // Now
         Card {
@@ -269,17 +262,14 @@ Item {
                             Layout.preferredWidth: 1
                             Layout.preferredHeight: full.cellHeight
 
-                            Rectangle {
+                            // Same highlight levels as Plasma's own calendar
+                            PlasmaExtras.Highlight {
                                 anchors.centerIn: parent
                                 width: full.cellHeight
                                 height: width
-                                radius: width / 2
-                                color: day.isToday ? root.accent
-                                    : day.isSelected ? Qt.alpha(root.accent, 0.25)
-                                    : dayMouse.containsMouse ? Qt.alpha(Kirigami.Theme.textColor, 0.1)
-                                    : "transparent"
-                                border.width: day.isSelected && day.isToday ? 2 : 0
-                                border.color: Kirigami.Theme.textColor
+                                hovered: true
+                                visible: opacity > 0
+                                opacity: day.isToday ? 1 : day.isSelected ? 0.6 : dayMouse.containsMouse ? 0.3 : 0
                             }
 
                             PlasmaComponents.Label {
@@ -287,7 +277,6 @@ Item {
                                 text: day.date.getDate()
                                 font.bold: day.isToday || day.isSelected
                                 font.features: ({ "tnum": 1 })
-                                color: day.isToday ? "white" : Kirigami.Theme.textColor
                                 opacity: day.inMonth || day.isToday ? 1 : 0.35
                             }
 
@@ -328,10 +317,10 @@ Item {
                 value: i18n("%1 of %2", root.dayOfYear(full.selected), leap ? 366 : 365)
             }
         }
+    }
 
-        // Footer
-        RowLayout {
-            Layout.fillWidth: true
+    footer: PlasmaExtras.PlasmoidHeading {
+        contentItem: RowLayout {
             spacing: Kirigami.Units.smallSpacing
 
             PlasmaComponents.Label {
