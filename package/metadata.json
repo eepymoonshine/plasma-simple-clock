@@ -14,7 +14,7 @@
         "Id": "com.github.eepymoonshine.simpleclock",
         "License": "GPL-3.0-or-later",
         "Name": "Simple Clock",
-        "Version": "1.0",
+        "Version": "1.1",
         "Website": "https://github.com/eepymoonshine/plasma-simple-clock"
     },
     "X-Plasma-API-Minimum-Version": "6.0"
